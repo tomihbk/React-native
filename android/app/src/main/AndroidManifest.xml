@@ -10,10 +10,10 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
-
-         <meta-data
-     android:name="com.google.android.geo.AIzaSyBIWLF5973i1Q2mdPnsyGLhFnSqvw3ALzg"
-     android:value="AIzaSyBIWLF5973i1Q2mdPnsyGLhFnSqvw3ALzg"/>
+      <uses-library android:name="org.apache.http.legacy" android:required="false"/> <!-- Very important if app crashes while loading maps-->
+      <meta-data
+      android:name="com.google.android.geo.API_KEY"
+      android:value="AIzaSyCvxwO_z8EU9EbF0JhgZ5ht2EZ0nTZYF_Y"/>
 
       <activity
         android:name=".MainActivity"

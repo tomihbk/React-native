@@ -1,10 +1,18 @@
 import React, { Component } from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions
+} from "react-native";
 import { connect } from "react-redux";
 import { deletePlace } from "../../store/actions/index";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Navigation } from "react-native-navigation";
 import { Platform } from "react-native";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 class PlaceDetail extends Component {
   placeDeletedHandler = () => {
@@ -21,6 +29,23 @@ class PlaceDetail extends Component {
             resizeMode="contain"
             style={styles.placeImage}
           />
+          <View style={styles.mapContainer}>
+            <MapView
+              provider={PROVIDER_GOOGLE}
+              style={styles.map}
+              initialRegion={{
+                ...this.props.selectedPlace.location,
+                latitudeDelta: 0.0122,
+                longitudeDelta:
+                  (Dimensions.get("window").width /
+                    Dimensions.get("window").height) *
+                  0.0122
+              }}
+              ref={ref => (this.map = ref)}
+            >
+              <MapView.Marker coordinate={this.props.selectedPlace.location} />
+            </MapView>
+          </View>
           <Text style={styles.placeName}>{this.props.selectedPlace.name}</Text>
         </View>
         <View>
@@ -63,6 +88,13 @@ const styles = StyleSheet.create({
   },
   deletebtn: {
     alignItems: "center"
+  },
+  mapContainer: {
+    width: "100%",
+    height: 300
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject
   }
 });
 export default connect(

@@ -32,6 +32,10 @@ class SharePlaceScreen extends Component {
         location: {
           value: null,
           valid: false
+        },
+        image: {
+          value: null,
+          valid: false
         }
       }
     };
@@ -80,10 +84,25 @@ class SharePlaceScreen extends Component {
     });
   };
 
+  imagePickedHandler = image => {
+    this.setState(prevState => {
+      return {
+        controls: {
+          ...prevState.controls,
+          image: {
+            value: image,
+            valid: true
+          }
+        }
+      };
+    });
+  };
+
   placeAddedHandler = () => {
     this.props.onAddPlace(
       this.state.controls.placeName.value,
-      this.state.controls.location.value
+      this.state.controls.location.value,
+      this.state.controls.image.value
     );
   };
   render() {
@@ -91,7 +110,7 @@ class SharePlaceScreen extends Component {
       <ScrollView>
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <HeadingText>Share a Place with us!</HeadingText>
-          <PickImage />
+          <PickImage onImagePicked={this.imagePickedHandler} />
           <PickLocation onLocationPick={this.locationPickedHandler} />
           <PlaceInput
             placeName={this.state.controls.placeName.value}
@@ -101,7 +120,8 @@ class SharePlaceScreen extends Component {
             title="Share the Place"
             disabled={
               !this.state.controls.placeName.valid ||
-              !this.state.controls.location.valid
+              !this.state.controls.location.valid ||
+              !this.state.controls.image.valid
             }
             onPress={this.placeAddedHandler}
           />
@@ -113,7 +133,8 @@ class SharePlaceScreen extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAddPlace: (placeName, location) => dispatch(addPlace(placeName, location))
+    onAddPlace: (placeName, location, image) =>
+      dispatch(addPlace(placeName, location, image))
   };
 };
 

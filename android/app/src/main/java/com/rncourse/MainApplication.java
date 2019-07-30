@@ -3,6 +3,7 @@ package com.rncourse;
 import android.app.Application;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.airbnb.android.react.maps.MapsPackage;
+import com.imagepicker.ImagePickerPackage;
 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
@@ -70,7 +71,7 @@ public class MainApplication extends NavigationApplication {
     // No need to add RnnPackage and MainReactPackage
     return Arrays.<ReactPackage>asList(
         // eg. new VectorIconsPackage()
-        new VectorIconsPackage(), new MainReactPackage(), new MapsPackage());
+        new VectorIconsPackage(), new MainReactPackage(), new MapsPackage(),new ImagePickerPackage());
   }
 
   @Override

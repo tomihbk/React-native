@@ -146,6 +146,7 @@ dependencies {
     compile project(':react-native-vector-icons')
     implementation 'com.android.support:design:27.1.0'
     implementation project(':react-native-navigation')
+    implementation project(':react-native-image-picker')
 
     implementation(project(':react-native-maps')){
        exclude group: 'com.google.android.gms', module: 'play-services-base'

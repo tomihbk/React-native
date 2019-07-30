@@ -13,13 +13,27 @@ import HeadingText from "../../components/UI/HeadingText/HeadingText";
 import PlaceInput from "../../components/PlaceInput/PlaceInput";
 import PickImage from "../../components/PickImage/PickImage";
 import PickLocation from "../../components/PickLocation/PickLocation";
+import validate from "../../utility/validation";
 
 class SharePlaceScreen extends Component {
   constructor(props) {
     super(props);
     Navigation.events().bindComponent(this); // <== Will be automatically unregistered when unmounted
     this.state = {
-      placeName: ""
+      controls: {
+        placeName: {
+          value: "",
+          valid: false,
+          touched: false,
+          validationRules: {
+            notEmpty: true
+          }
+        },
+        location: {
+          value: null,
+          valid: false
+        }
+      }
     };
   }
 
@@ -36,16 +50,41 @@ class SharePlaceScreen extends Component {
     }
   }
 
-  placeChangeHandler = val => {
-    this.setState({
-      placeName: val
+  placeNameChangedHandler = val => {
+    this.setState(prevState => {
+      return {
+        controls: {
+          ...prevState.controls,
+          placeName: {
+            ...prevState.controls.placeName,
+            value: val,
+            valid: validate(val, prevState.controls.placeName.validationRules),
+            touched: true
+          }
+        }
+      };
+    });
+  };
+
+  locationPickedHandler = location => {
+    this.setState(prevState => {
+      return {
+        controls: {
+          ...prevState.controls,
+          location: {
+            value: location,
+            valid: true
+          }
+        }
+      };
     });
   };
 
   placeAddedHandler = () => {
-    if (this.state.placeName.trim() !== "") {
-      this.props.onAddPlace(this.state.placeName);
-    }
+    this.props.onAddPlace(
+      this.state.controls.placeName.value,
+      this.state.controls.location.value
+    );
   };
   render() {
     return (
@@ -53,12 +92,19 @@ class SharePlaceScreen extends Component {
         <KeyboardAvoidingView behavior="padding" style={styles.container}>
           <HeadingText>Share a Place with us!</HeadingText>
           <PickImage />
-          <PickLocation />
+          <PickLocation onLocationPick={this.locationPickedHandler} />
           <PlaceInput
-            placeName={this.state.placeName}
-            onChangeText={this.placeChangeHandler}
+            placeName={this.state.controls.placeName.value}
+            onChangeText={this.placeNameChangedHandler}
           />
-          <Button title="Share the Place" onPress={this.placeAddedHandler} />
+          <Button
+            title="Share the Place"
+            disabled={
+              !this.state.controls.placeName.valid ||
+              !this.state.controls.location.valid
+            }
+            onPress={this.placeAddedHandler}
+          />
         </KeyboardAvoidingView>
       </ScrollView>
     );
@@ -67,7 +113,7 @@ class SharePlaceScreen extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onAddPlace: placeName => dispatch(addPlace(placeName))
+    onAddPlace: (placeName, location) => dispatch(addPlace(placeName, location))
   };
 };
 

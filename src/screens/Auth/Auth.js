@@ -226,11 +226,11 @@ class AuthScreen extends Component {
             autoCapitalize="none"
             TextColor="white"
             secureTextEntry
-            disabled={
+            /**disabled={
               !email.valid ||
               (!confirmpassword.valid && this.state.authMode === "signup") ||
               !password.valid
-            }
+            }*/
           >
             Submit
           </ButtonWithBG>

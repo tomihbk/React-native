@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Image, Button, StyleSheet } from "react-native";
+import { View, Image, Button, StyleSheet, ToastAndroid } from "react-native";
 import ImagePicker from "react-native-image-picker";
 
 class PickImage extends Component {
@@ -10,7 +10,13 @@ class PickImage extends Component {
   pickImageHandler = () => {
     ImagePicker.showImagePicker({ title: "Pick an Image" }, res => {
       if (res.didCancel) {
-        console.log("user cancelled!");
+        ToastAndroid.showWithGravityAndOffset(
+          "Image picker cancelled",
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM,
+          0, //xoffset
+          50 //yoffset
+        );
       } else if (res.error) {
         console.log("Error", res.error);
       } else {
